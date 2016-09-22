@@ -74,7 +74,7 @@ class ucenter extends integrate
      */
     function ucenter($cfg)
     {
-        parent::integrate(array());
+        parent::__construct(array());
         $this->user_table = 'users';
         $this->field_id = 'user_id';
         $this->field_name = 'user_name';

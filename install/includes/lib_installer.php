@@ -161,31 +161,25 @@ function get_db_list($db_host, $db_port, $db_user, $db_pass)
     $db_host = construct_db_host($db_host, $db_port);
     $conn = @mysqli_connect($db_host, $db_user, $db_pass);
 
-    if ($conn === false)
-    {
+    if ($conn === false) {
         $err->add($_LANG['connect_failed']);
         return false;
     }
     keep_right_conn($conn);
 
     $result = mysqli_query($conn,'SHOW DATABASES');
-    if ($result !== false)
-    {
-        while (($row = mysql_fetch_assoc($result)) !== false)
-        {
-            if (in_array($row['Database'], $filter_dbs))
-            {
+    if ($result !== false) {
+        while ($row = mysqli_fetch_assoc($result)){
+            if (in_array($row['Database'], $filter_dbs)) {
                 continue;
             }
             $databases[] = $row['Database'];
         }
-    }
-    else
-    {
+    } else {
         $err->add($_LANG['query_failed']);
         return false;
     }
-    @mysql_close($conn);
+    @mysqli_close($conn);
 
     return $databases;
 }
@@ -245,7 +239,7 @@ function create_database($db_host, $db_port, $db_user, $db_pass, $db_name)
 {
     global $err, $_LANG;
     $db_host = construct_db_host($db_host, $db_port);
-    $conn = @mysql_connect($db_host, $db_user, $db_pass);
+    $conn = @mysqli_connect($db_host, $db_user, $db_pass);
 
     if ($conn === false)
     {
@@ -254,19 +248,16 @@ function create_database($db_host, $db_port, $db_user, $db_pass, $db_name)
         return false;
     }
 
-    $mysql_version = mysql_get_server_info($conn);
+    $mysqli_version = mysqli_get_server_info($conn);
     keep_right_conn($conn, $mysql_version);
-    if (mysqli_select_db($db_name, $conn) === false)
-    {
+    if (mysqli_select_db($conn, $db_name) === false) {
         $sql = $mysql_version >= '4.1' ? "CREATE DATABASE $db_name DEFAULT CHARACTER SET " . EC_DB_CHARSET : "CREATE DATABASE $db_name";
-        if (mysqli_query($sql, $conn) === false)
-        {
+        if (mysqli_query($conn, $sql) === false) {
             $err->add($_LANG['cannt_create_database']);
             return false;
         }
     }
-    @mysql_close($conn);
-
+    @mysqli_close($conn);
     return true;
 }
 
@@ -278,7 +269,7 @@ function create_database($db_host, $db_port, $db_user, $db_pass, $db_name)
  * @param   string      $mysql_version        mysql版本号
  * @return  void
  */
-function keep_right_conn($conn, $mysql_version='')
+function keep_right_conn($conn, $mysql_version='') 
 {
     if ($mysql_version === '')
     {

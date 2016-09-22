@@ -221,7 +221,7 @@ if ($_REQUEST['act'] == 'dumpsql')
     {
         case 'full':
             $except = array($ecs->prefix.'sessions', $ecs->prefix.'sessions_data');
-            $temp = $db->GetCol("SHOW TABLES LIKE '" . mysql_like_quote($ecs->prefix) . "%'");
+            $temp = $db->GetCol("SHOW TABLES LIKE '" . mysqli_like_quote($ecs->prefix) . "%'");
             foreach ($temp AS $table)
             {
                 if (in_array($table, $except))
@@ -262,7 +262,7 @@ if ($_REQUEST['act'] == 'dumpsql')
 
     /* 开始备份 */
     $tables = $dump->dump_table($run_log, $vol);
-
+    echo 23423423;
     if ($tables === false)
     {
         die($dump->errorMsg());

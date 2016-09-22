@@ -444,7 +444,7 @@ if (USE_DEBUGLIB) {
 
         mysql_data_seek($RESULT, 0);
 
-        while ($DB_ROW = mysql_fetch_array($RESULT, MYSQL_NUM)) {
+        while ($DB_ROW = mysql_fetch_array($RESULT, MYSQLI_NUM)) {
             $pointer++;
             if($toggle) {
                 $col1 = "E6E6E6";

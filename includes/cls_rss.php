@@ -53,7 +53,7 @@ class RSSBase
     // @return (void)
     // @access private
     //-------------------------------------------------
-    function RSSBase() {
+    function __construct() {
     } // end constructor
 
 } // end class RSSBase
@@ -293,7 +293,7 @@ class RSSBuilder extends RSSBase
     // @uses setEncoding(), setAbout(), setTitle(), setDescription(), setImageLink(), setCategory(), setCache()
     // @access private
     //-------------------------------------------------
-    function RSSBuilder($encoding = '',
+    function __construct($encoding = '',
                         $about = '',
                         $title = '',
                         $description = '',
@@ -1483,7 +1483,7 @@ class RSSItem extends RSSBase
     // @uses setAbout(), setTitle(), setLink(), setDescription(), setSubject(), setDate(), setAuthor(), setComments()
     // @access private
     //-------------------------------------------------
-    function RSSItem($about = '',
+    function __construct($about = '',
                     $title = '',
                     $link = '',
                     $description = '',

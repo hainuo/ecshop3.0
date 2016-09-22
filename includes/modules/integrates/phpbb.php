@@ -67,7 +67,7 @@ class phpbb extends integrate
      */
     function phpbb($cfg)
     {
-        parent::integrate($cfg);
+        parent::__construct($cfg);
         if ($this->error)
         {
             /* 数据库连接出错 */

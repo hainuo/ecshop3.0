@@ -37,7 +37,7 @@ if ($_REQUEST['act']== 'list')
     }
     $tab = !$isOpenWap ? 'open' : 'enter';
     $charset = EC_CHARSET == 'utf-8' ? "utf8" : 'gbk';
-    $smarty->assign('iframe_url', 'http://yunqi-ecshop.ec-ae.com/yunqi_mobile_'.$charset.'.html#'.$tab);
+    // $smarty->assign('iframe_url', 'http://yunqi-ecshop.ec-ae.com/yunqi_mobile_'.$charset.'.html#'.$tab);
     $smarty->display('lead.htm');
 }
 

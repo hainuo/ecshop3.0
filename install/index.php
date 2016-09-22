@@ -48,8 +48,7 @@ if (file_exists(ROOT_PATH . 'data/install.lock') && $step != 'done')
     $step = 'error';
     $err->add($_LANG['has_locked_installer']);
 
-    if (isset($_REQUEST['IS_AJAX_REQUEST'])
-            && $_REQUEST['IS_AJAX_REQUEST'] === 'yes')
+    if (isset($_REQUEST['IS_AJAX_REQUEST']) && $_REQUEST['IS_AJAX_REQUEST'] === 'yes')
     {
         die(implode(',', $err->get_all()));
     }
@@ -92,7 +91,7 @@ case 'check' :
     if ($dir_checking['result'] === 'ERROR'
             || !empty($template_checking)
             || !empty($rename_priv)
-            || !function_exists('mysql_connect'))
+            || !function_exists('mysqli_connect'))
     {
         $disabled = 'disabled="true"';
     }

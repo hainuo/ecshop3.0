@@ -68,7 +68,7 @@ class discuz55 extends integrate
      */
     function discuz55($cfg)
     {
-        parent::integrate($cfg);
+        parent::__construct($cfg);
         if ($this->error)
         {
             /* 数据库连接出错 */

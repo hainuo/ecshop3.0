@@ -67,7 +67,7 @@ class vbb extends integrate
      */
     function vbb($cfg)
     {
-        parent::integrate($cfg);
+        parent::__construct($cfg);
         if ($this->error)
         {
             /* 数据库连接出错 */

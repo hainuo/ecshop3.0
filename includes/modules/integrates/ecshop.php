@@ -61,7 +61,7 @@ class ecshop extends integrate
      */
     function ecshop($cfg)
     {
-        parent::integrate(array());
+        parent::__construct(array());
         $this->user_table = 'users';
         $this->field_id = 'user_id';
         $this->ec_salt = 'ec_salt';

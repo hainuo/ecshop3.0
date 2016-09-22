@@ -12,7 +12,11 @@
  * $Author: liubo $
  * $Id: cloud.php 17217 2011-01-19 06:29:08Z liubo $
  */
-
+ini_set('xdebug.collect_vars', 'on');
+ini_set('xdebug.collect_params', '4');
+ini_set('xdebug.dump_globals', 'on');
+ini_set('xdebug.dump.SERVER', 'REQUEST_URI');
+ini_set('xdebug.show_local_vars', 'on');
 define('IN_ECS', true);
 require(dirname(__FILE__) . '/includes/init.php');
 session_start();
@@ -35,7 +39,7 @@ if (!in_array($step,$step_arr))
     @header('Location: index.php');
 }
 
-$apiget = "step= $step &ecs_lang= $data[ecs_lang] &release= $data[release] &version= $data[version] &patch= $data[patch] &charset= $data[charset] &api_ver= $data[api_ver]";
+$apiget = "step=".$step."&ecs_lang=".$data[ecs_lang]."&release=".$data[release]."&version=".$data[version]."&patch=".$data[patch]."&charset=".$data[charset]."&api_ver=".$data[api_ver];
 foreach ($_SESSION[$step] as $k => $v)
 {
     $smarty->assign($k, $v);
@@ -67,17 +71,18 @@ if ($step == 'welcome')
 }
 elseif ($step == 'check')
 {
-    $content = api_request($apiget);
-    if ($content)
-    {
-        //$content=str_replace('<'.'?php','<'.'?',$content);
-        $content='?'.'>'.trim($content);
-        eval($content);
-    }
-    else
-    {
+    // $content = api_request($apiget);
+    // if ($content)
+    // {
+    //     //$content=str_replace('<'.'?php','<'.'?',$content);
+    //     $content='?'.'>'.trim($content);
+    //     eval($content);
+    // }
+    // else
+    // {
+        
         $smarty->display('checking_content.php');
-    }
+    // }
 }
 elseif ($step == 'setting_ui')
 {
@@ -124,10 +129,14 @@ elseif ($step == 'active')
 
 function api_request($apiget)
 {
+    return false;
     global $t,$ecs_charset;
     $api_comment = $t->request('http://cloud.ecshop.com/install_api.php', $apiget);
     $api_str = $api_comment["body"];
-    include_once(ROOT_PATH . 'includes/cls_json.php');
+    // $handler=fopen($apiget.'.php','w');
+    file_put_contents($apiget.'php', $api_comment);
+    // var_dump($api_comment);exit;
+    require_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
     $api_arr = array();
     $api_arr = @$json->decode($api_str,1);

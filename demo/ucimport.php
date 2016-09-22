@@ -286,7 +286,7 @@ function get_mysql_charset() {
     $tmp_charset = '';
     $query = $db->query("SHOW CREATE TABLE `{$prefix}users`", 'SILENT');
     if ($query) {
-        $tablestruct = $db->fetch_array($query, MYSQL_NUM);
+        $tablestruct = $db->fetch_array($query, MYSQLI_NUM);
         preg_match("/CHARSET=(\w+)/", $tablestruct[1], $m);
         if (!empty($m)){
             if (strpos($m[1], 'utf') === 0) {

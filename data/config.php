@@ -3,18 +3,18 @@
 $db_host   = "localhost:3306";
 
 // database name
-$db_name   = "caches";
+$db_name   = "ecshop";
 
 // database username
 $db_user   = "root";
 
 // database password
-$db_pass   = "root";
+$db_pass   = "hainuo";
 
 // table prefix
 $prefix    = "ecs_";
 
-$timezone    = "PRC";
+$timezone    = "UTC";
 
 $cookie_path    = "/";
 
@@ -32,6 +32,6 @@ define('OLD_AUTH_KEY', '');
 
 define('API_TIME', '');
 
-define('STORE_KEY','753e8a2cac6fe6cd82ed5b2d5da3559b');
+define('STORE_KEY','0a7abad6afefa7063f5d23f133debe2c');
 
 ?>

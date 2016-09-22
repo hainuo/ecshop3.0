@@ -84,8 +84,8 @@ function get_system_info()
     $system_info[] = array($_LANG['php_ver'], PHP_VERSION);
 
     /* 检查MYSQL支持情况 */
-    $mysql_enabled = function_exists('mysql_connect') ? $_LANG['support'] : $_LANG['not_support'];
-    $system_info[] = array($_LANG['does_support_mysql'], $mysql_enabled);
+    $mysql_enabled = function_exists('mysqli_connect') ? $_LANG['support'] : $_LANG['not_support'];
+    $system_info[] = array($_LANG['does_support_mysqli'], $mysql_enabled);
 
     /* 检查图片处理函数库 */
     $gd_ver = get_gd_version();
@@ -159,7 +159,7 @@ function get_db_list($db_host, $db_port, $db_user, $db_pass)
     $databases = array();
     $filter_dbs = array('information_schema', 'mysql');
     $db_host = construct_db_host($db_host, $db_port);
-    $conn = @mysql_connect($db_host, $db_user, $db_pass);
+    $conn = @mysqli_connect($db_host, $db_user, $db_pass);
 
     if ($conn === false)
     {
@@ -168,24 +168,20 @@ function get_db_list($db_host, $db_port, $db_user, $db_pass)
     }
     keep_right_conn($conn);
 
-    $result = mysql_query('SHOW DATABASES', $conn);
-    if ($result !== false)
-    {
-        while (($row = mysql_fetch_assoc($result)) !== false)
-        {
-            if (in_array($row['Database'], $filter_dbs))
-            {
+    $result = mysqli_query($conn, 'SHOW DATABASES');
+    xdebug_var_dump($result);
+    if ($result !== false) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            if (in_array($row['Database'], $filter_dbs)) {
                 continue;
             }
             $databases[] = $row['Database'];
         }
-    }
-    else
-    {
+    } else {
         $err->add($_LANG['query_failed']);
         return false;
     }
-    @mysql_close($conn);
+    @mysqli_close($conn);
 
     return $databases;
 }
@@ -245,7 +241,7 @@ function create_database($db_host, $db_port, $db_user, $db_pass, $db_name)
 {
     global $err, $_LANG;
     $db_host = construct_db_host($db_host, $db_port);
-    $conn = @mysql_connect($db_host, $db_user, $db_pass);
+    $conn = @mysqli_connect($db_host, $db_user, $db_pass);
 
     if ($conn === false)
     {
@@ -254,18 +250,17 @@ function create_database($db_host, $db_port, $db_user, $db_pass, $db_name)
         return false;
     }
 
-    $mysql_version = mysql_get_server_info($conn);
+    $mysql_version = mysqli_get_server_info($conn);
     keep_right_conn($conn, $mysql_version);
-    if (mysql_select_db($db_name, $conn) === false)
-    {
+    
+    if (mysqli_select_db($conn, $db_name) === false) {
         $sql = $mysql_version >= '4.1' ? "CREATE DATABASE $db_name DEFAULT CHARACTER SET " . EC_DB_CHARSET : "CREATE DATABASE $db_name";
-        if (mysql_query($sql, $conn) === false)
-        {
+        if (mysqli_query($conn, $sql) === false) {
             $err->add($_LANG['cannt_create_database']);
             return false;
         }
     }
-    @mysql_close($conn);
+    @mysqli_close($conn);
 
     return true;
 }
@@ -280,18 +275,15 @@ function create_database($db_host, $db_port, $db_user, $db_pass, $db_name)
  */
 function keep_right_conn($conn, $mysql_version='')
 {
-    if ($mysql_version === '')
-    {
-        $mysql_version = mysql_get_server_info($conn);
+    if ($mysql_version === '') {
+        $mysql_version = mysqli_get_server_info($conn);
     }
 
-    if ($mysql_version >= '4.1')
-    {
-        mysql_query('SET character_set_connection=' . EC_DB_CHARSET . ', character_set_results=' . EC_DB_CHARSET . ', character_set_client=binary', $conn);
+    if ($mysql_version >= '4.1') {
+        mysqli_query($conn, 'SET character_set_connection=' . EC_DB_CHARSET . ', character_set_results=' . EC_DB_CHARSET . ', character_set_client=binary');
 
-        if ($mysql_version > '5.0.1')
-        {
-            mysql_query("SET sql_mode=''", $conn);
+        if ($mysql_version > '5.0.1') {
+            mysqli_query($conn, "SET sql_mode=''");
         }
     }
 }

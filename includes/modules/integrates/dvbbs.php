@@ -68,9 +68,8 @@ class dvbbs extends integrate
      */
     function dvbbs($cfg)
     {
-        parent::integrate($cfg);
-        if ($this->error)
-        {
+        parent::__construct($cfg);
+        if ($this->error) {
             /* 数据库连接出错 */
             return false;
         }
